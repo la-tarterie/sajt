@@ -1,0 +1,43 @@
+<!doctype html>
+<html lang="sr-Latn">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>La Tarterie</title>
+<meta name="description" content="La Tarterie: tartovi rađeni rukom. Izaberi naš tart, prilagodi ga ili napravi svoj, sloj po sloj.">
+<meta property="og:title" content="La Tarterie">
+<meta property="og:description" content="Tartovi rađeni rukom. Napravi svoj, sloj po sloj.">
+<meta property="og:image" content="/slike/tart-pistaci.jpg">
+<link rel="icon" href="/slike/apple-touch-icon.png">
+<link rel="apple-touch-icon" href="/slike/apple-touch-icon.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Lora:ital,wght@0,400;0,500;0,600;1,400;1,500&family=Mulish:wght@400;500;600;700&display=swap">
+<link rel="stylesheet" href="/css/stil.css">
+</head>
+<body>
+<!-- Netlify Forms: skrivena kopija forme da bi Netlify prepoznao polja porudžbine. -->
+<form name="porudzbina" data-netlify="true" netlify-honeypot="bot-polje" hidden>
+  <input name="ime"><input name="telefon"><input name="datum"><textarea name="napomena"></textarea><textarea name="stavke"></textarea><input name="bot-polje">
+</form>
+
+<div class="karo" aria-hidden="true"></div>
+<header class="top wrap">
+  <a href="#ponuda" class="logo" aria-label="La Tarterie, početna"><img src="slike/logo.jpg" alt="La Tarterie"></a>
+  <nav class="tabs" aria-label="Glavni meni">
+    <a href="#ponuda" data-route="ponuda">Naši tartovi</a>
+    <a href="#prilagodi" data-route="prilagodi">Prilagodi</a>
+    <a href="#napravi" data-route="napravi">Napravi svoj</a>
+    <a href="#korpa" data-route="korpa">Korpa <span class="badge" id="badge" data-zero>0</span></a>
+  </nav>
+</header>
+
+<main class="wrap" id="main"></main>
+
+<footer class="wrap">La Tarterie <span class="heart">♥</span> tartovi rađeni rukom</footer>
+<div class="toast" id="toast" role="status" aria-live="polite"></div>
+
+<script src="/js/ponuda.js"></script>
+<script src="/js/app.js"></script>
+</body>
+</html>
