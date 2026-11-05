@@ -12,6 +12,7 @@ Sajt za poručivanje tartova: gotovi tartovi, prilagođavanje postojećih i „N
 | `slike/` | Logo i fotografije tartova |
 | `index.html` | Stranica i skrivena forma za Netlify |
 | `netlify.toml` | Podešavanja za Netlify |
+| `netlify/edge-functions/ulaz.ts` | Ulaz sa lozinkom dok sajt nije javno otvoren |
 
 ## Kako se menja ponuda
 
@@ -30,6 +31,15 @@ Novi gotov tart: dodaj fotografiju u `slike/` i novi unos u `GOTOVI`.
 
 Forma se šalje preko Netlify Forms. Porudžbine se vide u Netlify panelu (Forms → porudzbina),
 a obaveštenje na mejl se uključuje u Site configuration → Notifications → Form submission notifications.
+
+## Lozinka za ulaz
+
+Dok sajt nije javno otvoren, ceo sajt je iza lozinke.
+
+- Netlify → Project configuration → Environment variables → dodaj `SITE_PASSWORD` sa lozinkom, pa ponovo objavi sajt.
+- Bez lozinke posetilac vidi samo stranicu „Uskoro otvaramo".
+- Posle ispravne lozinke pregledač pamti ulaz 30 dana. Promena lozinke izbacuje sve.
+- Za otvaranje sajta svima: obriši `SITE_PASSWORD` i ponovo objavi.
 
 ## Lokalno
 
