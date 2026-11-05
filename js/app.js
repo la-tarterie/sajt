@@ -304,7 +304,7 @@ function htmlKoraka(rezim){
         ${sw}<span class="n">${esc(o.naziv)}</span>${o.opis?`<span class="d">${esc(o.opis)}</span>`:""}${zab&&!izab?`<span class="zab">${esc(zab.trim())}</span>`:""}</button>`;
     }).join("");
     return `<section class="korak"><div class="korak-head">${br}<h3>${esc(k.naslov)}</h3>${brojac}<span class="pomoc">${esc(k.pomoc)}</span></div><div class="opcije">${ops}</div></section>`;
-  }).join("") + `<div class="builder-foot mobile-only"><button class="btn" type="button" data-akcija="graditelj-korpa" data-r="${rezim}" ${nedostaje(iz).length?"disabled":""}>Dodaj u korpu</button></div>`;
+  }).join("") + `<div class="builder-foot mobile-only"><p class="alergeni" id="alm-${rezim}"></p><button class="btn" type="button" data-akcija="graditelj-korpa" data-r="${rezim}" ${nedostaje(iz).length?"disabled":""}>Dodaj u korpu</button></div>`;
 }
 
 function prikaziKorpu(){
@@ -349,13 +349,17 @@ function ruta(){ const h=location.hash.replace("#",""); return RUTE.includes(h)?
 function prikazi(){
   const r=ruta(), m=document.getElementById("main");
   if(r!=="korpa") poslednjaPotvrda=null;
+  document.getElementById("toast").classList.remove("on");
   m.innerHTML = r==="ponuda"? prikaziPonudu() : r==="prilagodi"? prikaziGraditelja("prilagodi") : r==="napravi"? prikaziGraditelja("svoj") : prikaziKorpu();
+  if(r==="prilagodi"||r==="napravi") osveziGraditelja(r==="napravi"?"svoj":"prilagodi",true);
   document.querySelectorAll("nav.tabs a").forEach(a=>a.toggleAttribute("aria-current",false)||a.dataset.route===r&&a.setAttribute("aria-current","page"));
   osveziBadge();
 }
 function osveziGraditelja(rezim, samoPregled){
   const pv=document.getElementById("pv-"+rezim); if(pv) pv.innerHTML=htmlPregleda(rezim);
   if(!samoPregled){ const kr=document.getElementById("kr-"+rezim); if(kr) kr.innerHTML=htmlKoraka(rezim); }
+  const al=document.getElementById("alm-"+rezim);
+  if(al){ const a=alergeniZa(graditelj[rezim].iz); al.innerHTML=`<b>Sadrži:</b> ${a.length? esc(a.join(", ")) : "—"}`; }
 }
 window.addEventListener("hashchange",()=>{ prikazi(); window.scrollTo({top:0}); });
 

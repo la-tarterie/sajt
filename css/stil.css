@@ -142,10 +142,11 @@ main{padding-block:28px 64px}
 .zakljucan svg{flex:none}
 .polje{display:grid;gap:6px}
 .polje label{font-weight:700;font-size:.86rem}
-.polje input,.polje textarea{width:100%;border:1px solid var(--line);background:var(--surface);border-radius:10px;padding:10px 12px}
+.polje input,.polje textarea{width:100%;font-size:16px;border:1px solid var(--line);background:var(--surface);border-radius:10px;padding:10px 12px}
 .polje textarea{min-height:84px;resize:vertical}
 .polje .hint{font-size:.78rem;color:var(--ink-soft)}
 .builder-foot{display:flex;flex-wrap:wrap;gap:10px;align-items:center;justify-content:space-between;padding-top:4px}
+.builder-foot .alergeni{border:0;padding:0;flex-basis:100%}
 
 /* korpa */
 .korpa{display:grid;grid-template-columns:minmax(0,1fr) 360px;gap:28px;align-items:start}
@@ -160,6 +161,8 @@ main{padding-block:28px 64px}
 .kol button{appearance:none;width:32px;height:32px;border-radius:50%;border:1px solid var(--line);background:var(--surface);cursor:pointer;font-weight:700}
 .kol span{min-width:22px;text-align:center;font-variant-numeric:tabular-nums;font-weight:700}
 .stavka .desno{display:grid;gap:8px;justify-items:end}
+.stavka .desno .linkbtn{padding:10px 6px;min-height:44px}
+.kol button{min-width:40px;min-height:40px}
 .forma{background:var(--surface);border-radius:20px;box-shadow:var(--shadow);padding:20px;display:grid;gap:14px;position:sticky;top:calc(env(safe-area-inset-top,0px) + 14px)}
 .forma h2{font-size:1.3rem}
 .prazna{background:var(--surface);border-radius:20px;box-shadow:var(--shadow);padding:34px 24px;text-align:center;display:grid;gap:12px;justify-items:center}
