@@ -79,6 +79,8 @@ function vocka(t,x,y,s,r){
     case "smokve": return `<circle cx="${X}" cy="${Y}" r="${s}" fill="#6e2a4e"/><circle cx="${X}" cy="${Y}" r="${s*.74}" fill="#f2e2c0"/><circle cx="${X}" cy="${Y}" r="${s*.56}" fill="#d4566c"/>`;
     case "kivi": { let g=`<circle cx="${X}" cy="${Y}" r="${s}" fill="#7a6036"/><circle cx="${X}" cy="${Y}" r="${s*.9}" fill="#9fc14d"/><circle cx="${X}" cy="${Y}" r="${s*.32}" fill="#eef2c8"/>`; for(let i=0;i<9;i++){const a=i*Math.PI*2/9; g+=`<circle cx="${(x+Math.cos(a)*s*.45).toFixed(1)}" cy="${(y+Math.sin(a)*s*.45).toFixed(1)}" r="${s*.07}" fill="#1e1a12"/>`;} return g; }
     case "mango": return `<rect x="${(x-s*.75).toFixed(1)}" y="${(y-s*.75).toFixed(1)}" width="${s*1.5}" height="${s*1.5}" rx="${s*.35}" fill="#f2a93b" stroke="#d98a22" stroke-width=".6" transform="rotate(${r*90} ${X} ${Y})"/>`;
+    case "sumsko": return vocka(r<.34?"borovnice":r<.67?"kupine":"maline",x,y,s,r);
+    case "limun": { let g=`<circle cx="${X}" cy="${Y}" r="${s}" fill="#e8c02a"/><circle cx="${X}" cy="${Y}" r="${s*.86}" fill="#fbf0b0"/><circle cx="${X}" cy="${Y}" r="${s*.78}" fill="#f4dc5c"/>`; for(let i=0;i<8;i++){const a=i*Math.PI/4; g+=`<line x1="${X}" y1="${Y}" x2="${(x+Math.cos(a)*s*.78).toFixed(1)}" y2="${(y+Math.sin(a)*s*.78).toFixed(1)}" stroke="#fbf0b0" stroke-width=".9"/>`;} return g; }
     case "kruska": return `<ellipse cx="${X}" cy="${Y}" rx="${s*.55}" ry="${s*1.05}" fill="#ecdca6" stroke="#cdb46a" stroke-width=".8" transform="rotate(${r*180} ${X} ${Y})"/>`;
   }
   return "";
@@ -89,9 +91,9 @@ function crtezOdozgo(iz, idPref="t"){
   const P=pod?.boja || "#e9dfcc", F=fil?.boja || "#f1ebe0";
   const imaMasnice = iz.ukrasi.some(u=>["masslag","masnice"].includes(u));
   let povrs = F;
-  if(zav==="cokglaz") povrs="#3d2418";
+  if(zav==="glazura") povrs=nijansa(F,-.1);
   if(zav==="slag") povrs="#fbf7ee";
-  if(zav==="beze") povrs="#f4e3c4";
+  if(zav==="mering") povrs="#f4e3c4";
   const clip=`${idPref}-clip`;
   let s=`<svg viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg" aria-hidden="true"><defs><clipPath id="${clip}"><circle cx="100" cy="100" r="77"/></clipPath></defs>`;
   s+=`<ellipse cx="100" cy="104" rx="95" ry="92" fill="rgba(30,40,70,.10)"/>`;
@@ -102,20 +104,21 @@ function crtezOdozgo(iz, idPref="t"){
   if(!fil){ s+=`<circle cx="100" cy="100" r="60" fill="none" stroke="#cdbfa6" stroke-width="1.2" stroke-dasharray="4 5"/>`; }
   s+=`<g clip-path="url(#${clip})">`;
   if(zav==="secer"){ for(let i=0;i<220;i++){ const a=R()*6.283,r=Math.sqrt(R())*77; s+=`<circle cx="${(100+r*Math.cos(a)).toFixed(1)}" cy="${(100+r*Math.sin(a)).toFixed(1)}" r="${(0.6+R()*1.1).toFixed(1)}" fill="#ffffff" opacity=".9"/>`; } }
-  if(zav==="karamel"){
+  if(iz.ukrasi.includes("karamel")){
     for(let d=-160;d<=160;d+=17){
       s+=`<path d="M${100+d-90} 10 Q ${100+d-45} ${55+R()*6} ${100+d} 100 T ${100+d+90} 190" fill="none" stroke="#c4873e" stroke-width="2.4" stroke-linecap="round"/>`;
       s+=`<path d="M${100+d+90} 10 Q ${100+d+45} ${55+R()*6} ${100+d} 100 T ${100+d-90} 190" fill="none" stroke="#c4873e" stroke-width="2.4" stroke-linecap="round"/>`;
     }
   }
-  if(zav==="beze"){
+  if(zav==="mering"){
     for(const [rr,n] of [[68,26],[52,20],[36,14],[20,8],[0,1]]){
       for(let i=0;i<n;i++){ const a=i/n*6.283+rr*.05, x=100+rr*Math.cos(a), y=100+rr*Math.sin(a);
         s+=`<circle cx="${x.toFixed(1)}" cy="${y.toFixed(1)}" r="8" fill="#f8ecd6"/><path d="M${(x-3).toFixed(1)} ${(y+1).toFixed(1)} q3 -6 6 0" fill="none" stroke="#d9a866" stroke-width="1.6" stroke-linecap="round"/><circle cx="${(x+1).toFixed(1)}" cy="${(y-2.5).toFixed(1)}" r="1.6" fill="#c98b4a"/>`; }
     }
   }
-  if(["sjaj","cokglaz"].includes(zav) || (zav==="bez" && iz.fil==="cokolada")) s+=`<ellipse cx="78" cy="70" rx="34" ry="16" fill="#ffffff" opacity=".14" transform="rotate(-28 78 70)"/>`;
-  if(iz.ukrasi.includes("lotusmrv")){ for(let i=0;i<260;i++){ const a=R()*6.283, r=58+R()*20; s+=`<circle cx="${(100+r*Math.cos(a)).toFixed(1)}" cy="${(100+r*Math.sin(a)).toFixed(1)}" r="${(0.8+R()*1.6).toFixed(1)}" fill="${R()>.5?"#b0743c":"#c98a4c"}"/>`; } }
+  if(zav==="glazura" || (zav==="bez" && iz.fil==="mlecna")) s+=`<ellipse cx="78" cy="70" rx="34" ry="16" fill="#ffffff" opacity=".14" transform="rotate(-28 78 70)"/>`;
+  if(iz.ukrasi.includes("oreo")){ for(let i=0;i<240;i++){ const a=R()*6.283, r=58+R()*20; s+=`<circle cx="${(100+r*Math.cos(a)).toFixed(1)}" cy="${(100+r*Math.sin(a)).toFixed(1)}" r="${(0.8+R()*1.6).toFixed(1)}" fill="${R()>.5?"#2a2427":"#3d3539"}"/>`; } }
+  if(iz.ukrasi.includes("lotus")){ for(let i=0;i<260;i++){ const a=R()*6.283, r=58+R()*20; s+=`<circle cx="${(100+r*Math.cos(a)).toFixed(1)}" cy="${(100+r*Math.sin(a)).toFixed(1)}" r="${(0.8+R()*1.6).toFixed(1)}" fill="${R()>.5?"#b0743c":"#c98a4c"}"/>`; } }
   // voće
   if(iz.voce.length){
     const prst = imaMasnice ? [[50,14],[34,10],[18,6],[0,1]] : [[64,20],[47,15],[30,10],[13,4]];
@@ -140,10 +143,11 @@ function crtezOdozgo(iz, idPref="t"){
     const palete=[["#4b2a8a","#f1c93a"],["#7e66d1","#efe7f7"],["#5a3fae","#f2d14a"]];
     mesta.forEach(([a,r],i)=>{ s+=cvet(100+r*Math.cos(a),100+r*Math.sin(a),11,palete[i]); });
   }
-  if(iz.ukrasi.includes("lotuskeks")){ s+=`<g transform="rotate(-16 100 100)"><rect x="82" y="88" width="36" height="24" rx="5" fill="#a8693a" stroke="#c88b55" stroke-width="2" stroke-dasharray="2 2.4"/><rect x="88" y="94" width="24" height="12" rx="3" fill="none" stroke="#8a522a" stroke-width="1"/></g>`; }
+  if(iz.ukrasi.includes("oreo")){ [[100,100],[74,86],[126,86]].forEach(([x,y])=>{ s+=`<circle cx="${x}" cy="${y}" r="12" fill="#2a2427"/><circle cx="${x}" cy="${y}" r="9.5" fill="none" stroke="#4a4145" stroke-width="1" stroke-dasharray="1.5 1.5"/><circle cx="${x}" cy="${y}" r="5" fill="none" stroke="#3b3337" stroke-width="1"/>`; }); }
+  if(iz.ukrasi.includes("lotus")){ s+=`<g transform="rotate(-16 100 100)"><rect x="82" y="88" width="36" height="24" rx="5" fill="#a8693a" stroke="#c88b55" stroke-width="2" stroke-dasharray="2 2.4"/><rect x="88" y="94" width="24" height="12" rx="3" fill="none" stroke="#8a522a" stroke-width="1"/></g>`; }
   if(iz.natpis){
     const t=iz.natpis.length>18 ? iz.natpis.slice(0,17)+"…" : iz.natpis;
-    const y= iz.ukrasi.includes("lotuskeks") ? 132 : 100;
+    const y= iz.ukrasi.some(u=>["lotus","oreo"].includes(u)) ? 132 : 100;
     s+=`<g><rect x="58" y="${y-10}" width="84" height="20" rx="5" fill="#fbf3e3" stroke="#e1d0ad" stroke-width="1"/><text x="100" y="${y+3.5}" text-anchor="middle" font-family="Lora, Georgia, serif" font-style="italic" font-size="9" fill="#6a4a2e">${esc(t)}</text></g>`;
   }
   return s+`</svg>`;
@@ -161,25 +165,26 @@ function crtezPresek(iz){
   else { s+=`<rect x="34.5" y="${y-fh}" width="231" height="${fh}" fill="none" stroke="#cdbfa6" stroke-dasharray="4 4"/>`; }
   y-=fh;
   const id=iz.zavrsni;
+  if(id==="glazura"){ s+=`<rect x="34" y="${y-4}" width="232" height="4" fill="${zv.boja}"/>`; y-=4; }
   if(id==="cokglaz"||id==="slag"){ s+=`<rect x="34" y="${y-(id==="slag"?7:4)}" width="232" height="${id==="slag"?7:4}" fill="${zv.boja}" stroke="${nijansa(zv.boja,-.12)}" stroke-width=".5"/>`; y-= id==="slag"?7:4; }
   if(id==="sjaj"){ s+=`<rect x="34" y="${y-2}" width="232" height="2" fill="#f4d9b0" opacity=".8"/>`; }
   if(id==="secer"){ for(let x=38;x<264;x+=5) s+=`<circle cx="${x}" cy="${y-1}" r="1.3" fill="#ffffff" stroke="#e6e0d6" stroke-width=".3"/>`; }
   if(id==="karamel"){ for(let x=44;x<260;x+=14) s+=`<ellipse cx="${x}" cy="${y-1}" rx="4" ry="1.5" fill="#c4873e"/>`; }
-  if(id==="beze"){ let p=`M34 ${y}`; for(let x=34;x<266;x+=14){ p+=` Q ${x+7} ${y-22} ${x+14} ${y}`; } s+=`<path d="${p}Z" fill="#f6e6c8" stroke="#d9a866" stroke-width="1"/>`; for(let x=41;x<266;x+=14) s+=`<circle cx="${x}" cy="${y-10}" r="1.8" fill="#c98b4a"/>`; }
+  if(id==="mering"){ let p=`M34 ${y}`; for(let x=34;x<266;x+=14){ p+=` Q ${x+7} ${y-22} ${x+14} ${y}`; } s+=`<path d="${p}Z" fill="#f6e6c8" stroke="#d9a866" stroke-width="1"/>`; for(let x=41;x<266;x+=14) s+=`<circle cx="${x}" cy="${y-10}" r="1.8" fill="#c98b4a"/>`; }
   // voće i ukrasi na vrhu
   const R=rng("p"+JSON.stringify(iz));
-  const boje={jagode:"#d8324a",maline:"#c4294f",borovnice:"#363a72",kupine:"#2b1e37",smokve:"#7a2f55",kivi:"#9fc14d",mango:"#f2a93b",kruska:"#e6d39a"};
-  if(iz.voce.length && id!=="beze"){ const levo=iz.ukrasi.some(u=>["masslag","masnice"].includes(u))?70:44, desno=300-levo; let i=0; for(let x=levo;x<=desno;x+=13){ const t=iz.voce[i++%iz.voce.length]; s+=`<ellipse cx="${x}" cy="${y-4}" rx="6" ry="5" fill="${boje[t]}"/>`; } }
+  const boje={jagode:"#d8324a",maline:"#c4294f",sumsko:"#3a2f5e",limun:"#f1d457",borovnice:"#363a72",kupine:"#2b1e37",smokve:"#7a2f55",kivi:"#9fc14d",mango:"#f2a93b",kruska:"#e6d39a"};
+  if(iz.voce.length && id!=="mering"){ const levo=iz.ukrasi.some(u=>["masslag","masnice"].includes(u))?70:44, desno=300-levo; let i=0; for(let x=levo;x<=desno;x+=13){ const t=iz.voce[i++%iz.voce.length]; s+=`<ellipse cx="${x}" cy="${y-4}" rx="6" ry="5" fill="${boje[t]}"/>`; } }
   const mas=iz.ukrasi.filter(u=>["masslag","masnice"].includes(u));
   if(mas.length){ [44,56,244,256].forEach((x,i)=>{ const b=opc("ukrasi",mas[i%mas.length]).boja; s+=`<path d="M${x-6} ${y} q6 -16 12 0z" fill="${b}" stroke="${nijansa(b,-.2)}" stroke-width=".6"/>`; }); }
   if(iz.ukrasi.includes("cvece")) s+=`<circle cx="66" cy="${y-6}" r="5" fill="#5a3fae"/><circle cx="232" cy="${y-6}" r="5" fill="#7e66d1"/>`;
-  if(iz.ukrasi.includes("lotuskeks")) s+=`<rect x="136" y="${y-7}" width="28" height="6" rx="2" fill="#a8693a"/>`;
+  if(iz.ukrasi.includes("lotus")||iz.ukrasi.includes("oreo")) s+=`<rect x="136" y="${y-7}" width="28" height="6" rx="2" fill="${iz.ukrasi.includes("oreo")?"#2a2427":"#a8693a"}"/>`;
   if(iz.natpis) s+=`<rect x="120" y="${y-13}" width="60" height="5" rx="2" fill="#fbf3e3" stroke="#e1d0ad" stroke-width=".6"/>`;
   return s+`</svg>`;
 }
 
 /* ---------- stanje ---------- */
-const LS="la-tarterie-korpa-v1";
+const LS="la-tarterie-korpa-v2";
 let korpa=[]; try{ korpa=JSON.parse(localStorage.getItem(LS)||"[]"); }catch(e){ korpa=[]; }
 function sacuvaj(){ try{ localStorage.setItem(LS,JSON.stringify(korpa)); }catch(e){} osveziBadge(); }
 const graditelj={
@@ -195,7 +200,7 @@ function toast(t){ const el=document.getElementById("toast"); el.textContent=t; 
 function osveziBadge(){ const n=korpa.reduce((a,s)=>a+s.kolicina,0); const b=document.getElementById("badge"); b.textContent=n; if(n) b.removeAttribute("data-zero"); else b.setAttribute("data-zero",""); }
 function sastavTekst(iz){
   const delovi=[];
-  const v=opc("velicina",iz.velicina); if(v) delovi.push(v.naziv+" ("+v.opis.split(" · ")[0]+")");
+  const v=opc("velicina",iz.velicina); if(v) delovi.push(v.naziv);
   ["podloga","srednji","fil","zavrsni"].forEach(k=>{ const o=opc(k,iz[k]); if(o && o.id!=="bez") delovi.push(o.naziv); });
   if(iz.voce.length) delovi.push(iz.voce.map(id=>opc("voce",id).naziv).join(", "));
   if(iz.ukrasi.length) delovi.push(iz.ukrasi.map(id=>opc("ukrasi",id).naziv.toLowerCase()).join(", "));
@@ -209,9 +214,9 @@ function prikaziPonudu(){
   const kartice=GOTOVI.map(g=>{
     const r=g.recept;
     const chips=[opc("podloga",r.podloga), opc("fil",r.fil), opc("zavrsni",r.zavrsni)].filter(o=>o && o.id!=="bez").map(o=>`<span class="chip">${esc(o.naziv)}</span>`).join("");
-    const seg=g.velicine.map(v=>{ const o=opc("velicina",v); return `<button type="button" data-akcija="gotov-vel" data-g="${g.id}" data-v="${v}" aria-pressed="${velicinaGotovog[g.id]===v}" title="${esc(o.opis)}">${esc(o.naziv)} · ${esc(o.opis.split(" · ")[0])}</button>`; }).join("");
+    const seg=g.velicine.map(v=>{ const o=opc("velicina",v); return `<button type="button" data-akcija="gotov-vel" data-g="${g.id}" data-v="${v}" aria-pressed="${velicinaGotovog[g.id]===v}" title="${esc(o.opis)}">${esc(o.opis)}</button>`; }).join("");
     return `<article class="tart-card">
-      <div class="foto"><img src="${g.slika}" alt="${esc(g.naziv)}" loading="lazy"></div>
+      <div class="foto">${g.slika ? `<img src="${g.slika}" alt="${esc(g.naziv)}" loading="lazy">` : `<div class="crtez-foto" role="img" aria-label="${esc(g.naziv)}, crtež">${crtezOdozgo(g.recept,"g"+g.id)}</div>`}</div>
       <div class="body">
         <h2>${esc(g.naziv)}</h2>
         <p class="opis">${esc(g.opis)}</p>
@@ -239,7 +244,7 @@ function prikaziGraditelja(rezim){
   let glava;
   if(rezim==="prilagodi"){
     glava=`<div class="view-head"><span class="eyebrow">Prilagodi</span><h1>Prilagodi naš tart</h1><p>Izaberi tart koji ti se dopada. Osnova ostaje ista, a ti menjaš veličinu, voće, ukrase i natpis.</p></div>
-      <div class="osnove" role="group" aria-label="Osnova">${GOTOVI.map(x=>`<button type="button" class="osnova" data-akcija="osnova" data-g="${x.id}" aria-pressed="${g.osnova===x.id}"><img src="${x.slika}" alt="">${esc(x.naziv)}</button>`).join("")}</div>`;
+      <div class="osnove" role="group" aria-label="Osnova">${GOTOVI.map(x=>`<button type="button" class="osnova" data-akcija="osnova" data-g="${x.id}" aria-pressed="${g.osnova===x.id}">${x.slika ? `<img src="${x.slika}" alt="">` : `<span class="osnova-crtez">${crtezOdozgo(x.recept,"o"+x.id)}</span>`}${esc(x.naziv)}</button>`).join("")}</div>`;
   } else {
     glava=`<div class="view-head"><span class="eyebrow">Napravi svoj</span><h1>Tvoj tart, sloj po sloj</h1><p>Koraci idu odozdo nagore, onako kako se tart i pravi. Otvorili smo primer da vidiš kako izgleda; menjaj šta god hoćeš ili <button type="button" class="linkbtn" data-akcija="ispocetka" data-r="${rezim}">počni od nule</button>.</p></div>`;
   }
@@ -267,7 +272,7 @@ function htmlPregleda(rezim){
   const v=opc("velicina",iz.velicina);
   const al=alergeniZa(iz);
   return `<div class="crtez">${crtezOdozgo(iz,"pv"+rezim)}</div>
-    <div class="naziv">${esc(nazivZa(rezim))}<div class="eyebrow" style="margin-top:2px">${v? esc(v.naziv+" · "+v.opis):"veličina nije izabrana"}</div></div>
+    <div class="naziv">${esc(nazivZa(rezim))}<div class="eyebrow" style="margin-top:2px">${v? esc(v.opis):"veličina nije izabrana"}</div></div>
     <div class="presek" aria-label="Presek tarta">${crtezPresek(iz)}</div>
     <ul class="slojevi" aria-label="Sastav, odozgo nadole">${sloj}</ul>
     <p class="alergeni"><b>Sadrži:</b> ${al.length? esc(al.join(", ")) : "—"}</p>
@@ -322,7 +327,7 @@ function prikaziKorpu(){
   const tipovi={gotov:"Naš tart",prilagodjen:"Prilagođen",svoj:"Tvoj tart"};
   const stavke=korpa.map((s,i)=>{
     const g=GOTOVI.find(x=>x.id===s.gotovId);
-    const thumb = s.tip==="gotov" && g ? `<img src="${g.slika}" alt="">` : crtezOdozgo(s.izbor,"k"+i);
+    const thumb = s.tip==="gotov" && g && g.slika ? `<img src="${g.slika}" alt="">` : crtezOdozgo(s.izbor,"k"+i);
     return `<article class="stavka"><div class="thumb">${thumb}</div>
       <div style="min-width:0"><div class="tip">${tipovi[s.tip]}</div><h3>${esc(s.naziv)}</h3><p class="det">${esc(sastavTekst(s.izbor))}</p></div>
       <div class="desno"><div class="kol" role="group" aria-label="Količina"><button type="button" data-akcija="kol" data-i="${i}" data-d="-1" aria-label="Manje">−</button><span>${s.kolicina}</span><button type="button" data-akcija="kol" data-i="${i}" data-d="1" aria-label="Više">+</button></div>
